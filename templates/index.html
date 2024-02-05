@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Search</title>
+
+</head>
+<body>
+    <h1>Simple Search</h1>
+    <form id="searchForm">
+        <label for="searchQuery">Enter your query:</label>
+        <input type="text" id="searchQuery" name="searchQuery" required>
+        <button type="submit">Search</button>
+    </form>
+    
+        <ul id="resultList" style="list-style-type: none; padding: 5px;border-bottom: 1px solid #ddd;"></ul>
+ 
+</body>
+<script>
+    document.getElementById('searchForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+        const searchQuery = document.getElementById('searchQuery').value;
+        fetch(`/search?query=${encodeURIComponent(searchQuery)}`)
+            .then(response => response.json())
+            .then(data => {
+                const resultList = document.getElementById('resultList');
+                data.forEach(result => {
+                    console.log(result)
+                    
+
+                    // Create a new li element
+                    const listItem = document.createElement('li');
+                    // Apply styles to the li element
+                    listItem.style.border = '1px solid #ccc';
+                    listItem.style.marginBottom = '10px';
+                    listItem.style.padding = '10px';
+
+                   // Set the innerHTML of the li element with the data
+                    listItem.innerHTML = `
+                        <strong>Title:</strong> ${result.Title} <br>
+                        <strong>Authors:</strong> ${result.Authors} <br>
+                        <strong>Year:</strong> ${result.Year} <br>
+                        <strong>Publication URL:</strong> ${result["Publication URL"]} <br>
+                        <strong>Author Profile URL:</strong> <a href="${result["Author Profile URL"]}" target="_blank">${result["Author Profile URL"]}</a>
+                    `;
+
+                    // Append the li element to the ul element
+                    resultList.appendChild(listItem);
+                });
+            });
+    });
+</script>
+</html>

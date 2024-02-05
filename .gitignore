@@ -1,0 +1,32 @@
+# Virtual environment
+venv/
+
+# Compiled Python files
+*.pyc
+__pycache__/
+
+# Dependency directories
+env/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+
+# Local development settings
+instance/
+
+# Logs and databases
+*.log
+*.db
+
+# Environment variables file
+.env
+
+# Ignore IDE-specific files
+.idea/
+.vscode/
+
+# Ignore the Flask generated cache folder
+__pycache__/
