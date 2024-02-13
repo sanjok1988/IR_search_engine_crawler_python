@@ -20,11 +20,12 @@ def search():
 def searchDocs(query):
     ix = open_dir(crawler.INDEX_PATH)
     
+    # Search the index
     with ix.searcher(weighting=scoring.TF_IDF()) as searcher:
         query_parser = QueryParser("title", ix.schema)
         query = query_parser.parse(query)
         results = searcher.search(query, terms=True)
-        print(results)
+        
         formatted_results = [{'Title': result['title'],
                       'Authors': result['authors'],
                       'Year': result['year'],
@@ -32,7 +33,6 @@ def searchDocs(query):
                       'Author Profile URL': result['author_profile_url']}
                      for result in results]
     
-        print(formatted_results)
         return jsonify(formatted_results)
 
 if __name__ == '__main__':

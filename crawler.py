@@ -18,7 +18,7 @@ from itertools import chain
 app = Flask(__name__)
 
 # Constant variables
-BASE_URL = "https://pureportal.coventry.ac.uk/en/organisations/centre-for-health-and-life-sciences"
+BASE_URL = "https://pureportal.coventry.ac.uk/en/organisations/ihw-centre-for-health-and-life-sciences-chls/publications/"
 INDEX_PATH = "storage"
 
 # Crawler to fetch data from the Coventry University Research Centre for Health and Life Sciences (RCHL) portal
@@ -29,13 +29,17 @@ def crawl_and_index():
 
     # Initialize Whoosh index
     # schema = Schema(title=TEXT(stored=True))
+    # Define the schema for the index
     schema = Schema(title=TEXT(stored=True), authors=TEXT(stored=True), year=ID(stored=True), 
                     publication_url=ID(stored=True, unique=True), author_profile_url=ID(stored=True))
     
     if not os.path.exists(INDEX_PATH):
         os.mkdir(INDEX_PATH)
-        
+     
+    # Create or open an existing index   
     ix = create_in(INDEX_PATH, schema)
+    
+    # Obtain a writer object to add documents to the index
     writer = ix.writer()
 
     # Extract publication information
@@ -62,6 +66,7 @@ def crawl_and_index():
         author_profile_url = urljoin(BASE_URL, author_profile_url_tag['href']) if author_profile_url_tag else "N/A"
         
         # Add data to the Whoosh index
+        # Add documents to the index
         try:
             writer.add_document(title=title, authors=', '.join(authors), year=year,
                             publication_url=publication_url, author_profile_url=author_profile_url)
